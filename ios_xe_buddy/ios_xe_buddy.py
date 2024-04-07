@@ -54,7 +54,16 @@ class ChatWithIOSXE:
         self.docs = self.text_splitter.split_documents(self.pages)
 
     def store_in_chroma(self):
+        # Check if vectordb exists and use the .delete() function to clear it
+        if hasattr(self, 'vectordb') and self.vectordb is not None:
+            # Use the .delete() function to clear or delete the existing vectordb
+            self.vectordb.delete()
+            # After deletion, you can optionally set vectordb to None or leave it as is
+            # since you'll be creating a new instance immediately after
+            self.vectordb = None
+    
         embeddings = self.embedding_model
+        # Continue creating a new vectordb instance as before
         self.vectordb = Chroma.from_documents(self.docs, embedding=embeddings)
         self.vectordb.persist()
 
@@ -160,6 +169,14 @@ def page_chat():
             st.text_area("Conversation History:", value=st.session_state['conversation_history'], height=300, key="conversation_history_display")
         else:
             st.error("Please select a model to proceed.")
+    
+    if st.button("Run A New Show Command"):
+        # Reset conversation history and any other desired session state keys
+        st.session_state['conversation_history'] = ""
+        # Optionally, reset other states as needed
+        st.session_state['page'] = 'pyats_job'  # Redirect back to the first page
+        # Use st.experimental_rerun() to refresh the page and reflect changes
+        st.rerun()            
 
 # Streamlit UI setup
 st.title("IOS XE Buddy")
