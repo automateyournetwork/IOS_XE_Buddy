@@ -7,12 +7,12 @@ devices:
     platform: cat8000v
     credentials:
       default:
-        username: developer
+        username: admin
         password: C1sco12345
     connections:
       cli:
         protocol: ssh
-        ip: 10.10.20.48
+        ip: devnetsandboxiosxe.cisco.com
         port: 22
         arguments:
           connection_timeout: 360
